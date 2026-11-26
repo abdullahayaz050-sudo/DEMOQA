@@ -1,0 +1,8 @@
+id,jiraKey,module,feature,title,priority,technique,testData,steps,expected
+DQA-ELEM-001,SCRUM-25,elements,Text Box,Submit valid text box form,Critical,Positive,"Ada Lovelace; ada@example.com; both addresses","Open page; enter all values; click Submit","Output shows submitted name email and both addresses"
+DQA-ELEM-002,SCRUM-26,elements,Text Box,Reject invalid email,Critical,Negative,invalid-email,"Open page; enter invalid email; click Submit","Email fails HTML5 validity"
+DQA-ELEM-003,SCRUM-24,elements,Text Box,Submit name with optional fields empty,High,Equivalence partitioning,"Ada Lovelace; all other fields empty","Open page; enter name; leave remaining fields empty; click Submit","Output shows name only"
+DQA-ELEM-004,SCRUM-24,elements,Text Box,Submit empty form,High,Negative,All fields empty,"Open page; leave every field empty; click Submit","Output container exists but has no field values"
+DQA-ELEM-005,SCRUM-24,elements,Text Box,Preserve multiline address values,Medium,Positive / boundary,"Multiline current and permanent addresses","Open page; enter multiline addresses; click Submit","Both address lines remain in output"
+DQA-ELEM-006,SCRUM-24,elements,Text Box,Reject malformed email variants,High,Negative equivalence,"plainaddress; ada@; @example.com; ada example@example.com","Open page; enter and submit each variant","Each variant fails HTML5 validity"
+DQA-ELEM-007,SCRUM-24,elements,Text Box,Accept 64-character email local part,Medium,Boundary value analysis,"64-character local part plus @example.com","Open page; enter Boundary User and boundary email; submit","Email passes validation and appears in output"

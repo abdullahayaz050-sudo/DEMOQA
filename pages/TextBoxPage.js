@@ -30,6 +30,13 @@ class TextBoxPage {
   async emailIsValid() {
     return this.email.evaluate((input) => input.checkValidity());
   }
+
+  async clearForm() {
+    await this.fullName.fill('');
+    await this.email.fill('');
+    await this.currentAddress.fill('');
+    await this.permanentAddress.fill('');
+  }
 }
 
 module.exports = { TextBoxPage };

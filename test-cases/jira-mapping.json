@@ -1,0 +1,27 @@
+{
+  "SCRUM-24": {
+    "title": "DemoQA Text Box module",
+    "url": "https://abdullahayaz050.atlassian.net/browse/SCRUM-24",
+    "testCaseIds": [
+      "DQA-ELEM-003",
+      "DQA-ELEM-004",
+      "DQA-ELEM-005",
+      "DQA-ELEM-006",
+      "DQA-ELEM-007"
+    ]
+  },
+  "SCRUM-25": {
+    "title": "[DQA-ELEM-001] Submit valid text box form",
+    "url": "https://abdullahayaz050.atlassian.net/browse/SCRUM-25",
+    "testCaseIds": [
+      "DQA-ELEM-001"
+    ]
+  },
+  "SCRUM-26": {
+    "title": "[DQA-ELEM-002] Reject invalid email",
+    "url": "https://abdullahayaz050.atlassian.net/browse/SCRUM-26",
+    "testCaseIds": [
+      "DQA-ELEM-002"
+    ]
+  }
+}

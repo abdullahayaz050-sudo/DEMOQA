@@ -1,0 +1,129 @@
+[
+  {
+    "id": "DQA-ELEM-001",
+    "jiraKey": "SCRUM-25",
+    "module": "elements",
+    "feature": "Text Box",
+    "title": "Submit valid text box form",
+    "priority": "Critical",
+    "technique": "Positive",
+    "preconditions": ["The Text Box page is available", "No form values are prefilled"],
+    "testData": "Full name Ada Lovelace; email ada@example.com; valid current and permanent addresses",
+    "steps": [
+      "Open https://demoqa.com/text-box",
+      "Enter Ada Lovelace in Full Name",
+      "Enter ada@example.com in Email",
+      "Enter 12 Analytical Engine Road in Current Address",
+      "Enter London in Permanent Address",
+      "Click Submit"
+    ],
+    "expected": "The output panel shows the submitted name, email, and both addresses."
+  },
+  {
+    "id": "DQA-ELEM-002",
+    "jiraKey": "SCRUM-26",
+    "module": "elements",
+    "feature": "Text Box",
+    "title": "Reject invalid email",
+    "priority": "Critical",
+    "technique": "Negative",
+    "preconditions": ["The Text Box page is available"],
+    "testData": "invalid-email",
+    "steps": [
+      "Open https://demoqa.com/text-box",
+      "Enter invalid-email in Email",
+      "Click Submit"
+    ],
+    "expected": "The Email field fails HTML5 validity and no successful submission output is shown."
+  },
+  {
+    "id": "DQA-ELEM-003",
+    "jiraKey": "SCRUM-24",
+    "module": "elements",
+    "feature": "Text Box",
+    "title": "Submit name with optional fields empty",
+    "priority": "High",
+    "technique": "Equivalence partitioning",
+    "preconditions": ["The Text Box page is available"],
+    "testData": "Full name Ada Lovelace; all other fields empty",
+    "steps": [
+      "Open https://demoqa.com/text-box",
+      "Enter Ada Lovelace in Full Name",
+      "Leave Email, Current Address, and Permanent Address empty",
+      "Click Submit"
+    ],
+    "expected": "The output panel shows Name:Ada Lovelace and does not show values for empty fields."
+  },
+  {
+    "id": "DQA-ELEM-004",
+    "jiraKey": "SCRUM-24",
+    "module": "elements",
+    "feature": "Text Box",
+    "title": "Submit empty form",
+    "priority": "High",
+    "technique": "Negative",
+    "preconditions": ["The Text Box page is available"],
+    "testData": "All fields empty",
+    "steps": [
+      "Open https://demoqa.com/text-box",
+      "Leave every field empty",
+      "Click Submit"
+    ],
+    "expected": "The output container is present but contains no submitted field values."
+  },
+  {
+    "id": "DQA-ELEM-005",
+    "jiraKey": "SCRUM-24",
+    "module": "elements",
+    "feature": "Text Box",
+    "title": "Preserve multiline address values",
+    "priority": "Medium",
+    "technique": "Positive / boundary",
+    "preconditions": ["The Text Box page is available"],
+    "testData": "Current Address: Line 1 and Line 2; Permanent Address: Building 3 and Floor 5",
+    "steps": [
+      "Open https://demoqa.com/text-box",
+      "Enter a name and valid email",
+      "Enter two newline-separated lines in Current Address",
+      "Enter two newline-separated lines in Permanent Address",
+      "Click Submit"
+    ],
+    "expected": "Both address lines are rendered in the submission output without losing line content."
+  },
+  {
+    "id": "DQA-ELEM-006",
+    "jiraKey": "SCRUM-24",
+    "module": "elements",
+    "feature": "Text Box",
+    "title": "Reject malformed email variants",
+    "priority": "High",
+    "technique": "Negative equivalence",
+    "preconditions": ["The Text Box page is available"],
+    "testData": "plainaddress, ada@, @example.com, and ada example@example.com",
+    "steps": [
+      "Open https://demoqa.com/text-box",
+      "Enter each malformed email variant separately",
+      "Click Submit after each entry"
+    ],
+    "expected": "Each malformed value fails the Email field's HTML5 validity check."
+  },
+  {
+    "id": "DQA-ELEM-007",
+    "jiraKey": "SCRUM-24",
+    "module": "elements",
+    "feature": "Text Box",
+    "title": "Accept 64-character email local part",
+    "priority": "Medium",
+    "technique": "Boundary value analysis",
+    "preconditions": ["The Text Box page is available"],
+    "testData": "64 lowercase a characters followed by @example.com",
+    "steps": [
+      "Open https://demoqa.com/text-box",
+      "Enter Boundary User",
+      "Enter a 64-character local-part email address",
+      "Enter valid current and permanent addresses",
+      "Click Submit"
+    ],
+    "expected": "The 64-character local-part email passes browser validation and appears in the output."
+  }
+]
