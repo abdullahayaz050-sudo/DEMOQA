@@ -1,0 +1,12 @@
+.git
+.github
+.vscode
+.playwright-mcp
+node_modules
+test-results
+playwright-report
+allure-results
+allure-report
+.env
+.env.*
+*.log

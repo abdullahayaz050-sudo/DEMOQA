@@ -1,0 +1,506 @@
+{
+  "projectKey": "SCRUM",
+  "planning": {
+    "sprintName": "DemoQA CI hardening",
+    "duration": "2 weeks",
+    "goal": "Run the existing DemoQA regression suite reproducibly in Docker and publish traceable test evidence from Jenkins.",
+    "sequence": [
+      "Create the Epic and confirm the project supports Epic, Story, and Task issue types.",
+      "Create the Stories and Tasks using the payloads below.",
+      "Add created child issue keys to the Epic through the Jira Agile REST API.",
+      "Create or select a two-week sprint on the SCRUM board; add the Stories and Tasks after confirming team capacity."
+    ],
+    "estimationGuidance": "Estimate during refinement using the team's scale; do not assume project-specific story-point fields or sprint IDs."
+  },
+  "jql": {
+    "demoqaBacklog": "project = SCRUM AND labels = demoqa AND statusCategory != Done ORDER BY Rank ASC",
+    "epicChildren": "project = SCRUM AND parent = \"<EPIC_KEY>\" ORDER BY Rank ASC",
+    "unassignedToSprint": "project = SCRUM AND labels = demoqa AND sprint is EMPTY ORDER BY priority DESC"
+  },
+  "createIssueEndpoint": "/rest/api/3/issue",
+  "epic": {
+    "fields": {
+      "project": {
+        "key": "SCRUM"
+      },
+      "issuetype": {
+        "name": "Epic"
+      },
+      "summary": "DemoQA automated regression and CI delivery",
+      "labels": [
+        "demoqa",
+        "qa-automation"
+      ],
+      "description": {
+        "type": "doc",
+        "version": 1,
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Deliver a reliable, traceable Playwright regression workflow for https://demoqa.com/ using Docker and Jenkins."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Epic acceptance criteria:"
+              }
+            ]
+          },
+          {
+            "type": "bulletList",
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "The existing Playwright suite runs in a reproducible browser-matched Docker image."
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Jenkins checks out the GitHub repository, builds the image, executes tests, and publishes JUnit and HTML reports."
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Test cases retain stable IDs and Jira links; secrets are stored only in approved credential stores."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "children": [
+    {
+      "kind": "Story",
+      "summary": "Run DemoQA Playwright regression tests in Docker",
+      "labels": [
+        "demoqa",
+        "qa-automation",
+        "docker"
+      ],
+      "description": "As a QA engineer, I want the existing Playwright suite in a version-matched container so that local and CI results use the same browser runtime.\n\nAcceptance criteria:\n- Docker image installs dependencies with npm ci and uses the matching Playwright browser image.\n- The full suite runs headlessly with one worker and returns a failing exit code if any test fails.\n- JUnit XML and the Playwright HTML report are written to mounted output directories.\n- Build and run commands are documented and verified on a Docker host.",
+      "sprintEstimate": "3 points (proposal; refine with the team)",
+      "createPayload": {
+        "fields": {
+          "project": {
+            "key": "SCRUM"
+          },
+          "issuetype": {
+            "name": "Story"
+          },
+          "summary": "Run DemoQA Playwright regression tests in Docker",
+          "labels": [
+            "demoqa",
+            "qa-automation",
+            "docker"
+          ],
+          "description": {
+            "type": "doc",
+            "version": 1,
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "As a QA engineer, I want the existing Playwright suite in a version-matched container so that local and CI results use the same browser runtime."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": ""
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Acceptance criteria:"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "- Docker image installs dependencies with npm ci and uses the matching Playwright browser image."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "- The full suite runs headlessly with one worker and returns a failing exit code if any test fails."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "- JUnit XML and the Playwright HTML report are written to mounted output directories."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "- Build and run commands are documented and verified on a Docker host."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "Story",
+      "summary": "Run Dockerized DemoQA regression on GitHub changes in Jenkins",
+      "labels": [
+        "demoqa",
+        "qa-automation",
+        "jenkins",
+        "ci"
+      ],
+      "description": "As a developer, I want Jenkins to run the Dockerized regression suite for repository changes so that failures and reports are visible without manual execution.\n\nAcceptance criteria:\n- Jenkins checks out the configured GitHub branch and builds the test image.\n- A GitHub webhook or SCM polling triggers the pipeline after changes.\n- Test failures mark the build failed; successful runs publish JUnit results.\n- HTML reports, test results, and useful failure evidence are archived.\n- Jenkins uses managed credentials and an agent with Docker access.",
+      "sprintEstimate": "5 points (proposal; refine with the team)",
+      "createPayload": {
+        "fields": {
+          "project": {
+            "key": "SCRUM"
+          },
+          "issuetype": {
+            "name": "Story"
+          },
+          "summary": "Run Dockerized DemoQA regression on GitHub changes in Jenkins",
+          "labels": [
+            "demoqa",
+            "qa-automation",
+            "jenkins",
+            "ci"
+          ],
+          "description": {
+            "type": "doc",
+            "version": 1,
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "As a developer, I want Jenkins to run the Dockerized regression suite for repository changes so that failures and reports are visible without manual execution."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": ""
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Acceptance criteria:"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "- Jenkins checks out the configured GitHub branch and builds the test image."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "- A GitHub webhook or SCM polling triggers the pipeline after changes."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "- Test failures mark the build failed; successful runs publish JUnit results."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "- HTML reports, test results, and useful failure evidence are archived."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "- Jenkins uses managed credentials and an agent with Docker access."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "Story",
+      "summary": "Maintain DemoQA test case and Jira traceability",
+      "labels": [
+        "demoqa",
+        "qa-automation",
+        "traceability"
+      ],
+      "description": "As a QA engineer, I want stable test case IDs and Jira links maintained with the automation so that coverage, execution, and backlog work remain traceable.\n\nAcceptance criteria:\n- Test case JSON and CSV stay synchronized.\n- Automated tests include the local case ID and corresponding Jira key when available.\n- Jira issues include scenario, steps, expected result, priority, and labels.\n- Existing valid Jira issues are reused; duplicate issues are not created.",
+      "sprintEstimate": "3 points (proposal; refine with the team)",
+      "createPayload": {
+        "fields": {
+          "project": {
+            "key": "SCRUM"
+          },
+          "issuetype": {
+            "name": "Story"
+          },
+          "summary": "Maintain DemoQA test case and Jira traceability",
+          "labels": [
+            "demoqa",
+            "qa-automation",
+            "traceability"
+          ],
+          "description": {
+            "type": "doc",
+            "version": 1,
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "As a QA engineer, I want stable test case IDs and Jira links maintained with the automation so that coverage, execution, and backlog work remain traceable."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": ""
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Acceptance criteria:"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "- Test case JSON and CSV stay synchronized."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "- Automated tests include the local case ID and corresponding Jira key when available."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "- Jira issues include scenario, steps, expected result, priority, and labels."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "- Existing valid Jira issues are reused; duplicate issues are not created."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "Task",
+      "summary": "Configure Jenkins Pipeline job and GitHub change trigger",
+      "labels": [
+        "demoqa",
+        "jenkins",
+        "ci",
+        "manual-setup"
+      ],
+      "description": "Configure a Pipeline or Multibranch Pipeline job for the repository, point it at the intended branch and Jenkinsfile, grant the agent Docker access, and configure a GitHub webhook or enable the provided SCM polling. Verify JUnit and HTML artifacts from a real build.",
+      "sprintEstimate": "2 points (proposal; refine with the team)",
+      "createPayload": {
+        "fields": {
+          "project": {
+            "key": "SCRUM"
+          },
+          "issuetype": {
+            "name": "Task"
+          },
+          "summary": "Configure Jenkins Pipeline job and GitHub change trigger",
+          "labels": [
+            "demoqa",
+            "jenkins",
+            "ci",
+            "manual-setup"
+          ],
+          "description": {
+            "type": "doc",
+            "version": 1,
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Configure a Pipeline or Multibranch Pipeline job for the repository, point it at the intended branch and Jenkinsfile, grant the agent Docker access, and configure a GitHub webhook or enable the provided SCM polling. Verify JUnit and HTML artifacts from a real build."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "Task",
+      "summary": "Create Jira backlog issues and plan the first CI hardening sprint",
+      "labels": [
+        "demoqa",
+        "jira",
+        "scrum"
+      ],
+      "description": "Confirm the SCRUM issue types and active board, create the Epic and child issues from this payload, link children to the Epic, then select or create a two-week sprint and plan work according to team capacity.",
+      "sprintEstimate": "1 point (proposal; refine with the team)",
+      "createPayload": {
+        "fields": {
+          "project": {
+            "key": "SCRUM"
+          },
+          "issuetype": {
+            "name": "Task"
+          },
+          "summary": "Create Jira backlog issues and plan the first CI hardening sprint",
+          "labels": [
+            "demoqa",
+            "jira",
+            "scrum"
+          ],
+          "description": {
+            "type": "doc",
+            "version": 1,
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Confirm the SCRUM issue types and active board, create the Epic and child issues from this payload, link children to the Epic, then select or create a two-week sprint and plan work according to team capacity."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "linkChildrenEndpoint": "/rest/agile/1.0/epic/<EPIC_KEY>/issue",
+  "linkChildrenBodyTemplate": {
+    "issues": [
+      "<CREATED_CHILD_ISSUE_KEY>"
+    ]
+  },
+  "sprintIssueEndpointTemplate": "/rest/agile/1.0/sprint/<SPRINT_ID>/issue",
+  "sprintIssueBodyTemplate": {
+    "issues": [
+      "<CREATED_CHILD_ISSUE_KEY>"
+    ]
+  }
+}

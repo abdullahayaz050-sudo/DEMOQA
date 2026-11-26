@@ -5,7 +5,11 @@ module.exports = defineConfig({
   timeout: 30_000,
   expect: { timeout: 5_000 },
   fullyParallel: false,
-  reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
+  reporter: [
+    ['list'],
+    ['html', { open: 'never', outputFolder: 'playwright-report' }],
+    ['junit', { outputFile: 'test-results/junit.xml' }],
+  ],
   use: {
     baseURL: 'https://demoqa.com',
     headless: true,
